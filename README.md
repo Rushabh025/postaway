@@ -18,3 +18,18 @@ Tasks
 13. Create a token based middleware for user authentication and to secure all the application routes. 
 14. Create a logger middleware to log request URL and body for all routes, excluding the user routes
 15. Document the application explaining functionalities, dependencies, and code organization for easy understanding of the codebase. 
+
+
+Acceptance criteria
+1. Create a scalable architecture with ExpressJS that separates data management, application logic and routing control. 
+2. Utilize ES6 Modules to maintain code modularity and organization.
+3. Use in-memory data structures for post, like, comment and user management operations.
+4. Create a login and registration system, allowing users to register and log into their accounts.
+5. Allow users to create a post, view all posts, view details of a specific post, like and remove the like from a post and comment on a post.
+6. The users should be able to update and delete the posts and comments, view profile posts, and get all likes and comments on a specific post.
+7. Create a custom error class that sets the status code and error message and use an error handler middleware to send custom error messages.
+8. Use Json Web Tokens to create, verify and manage authentication tokens and to secure all the application routes, excluding the user routes.
+9. Implement a file upload middleware to store and manage post media.
+10. Use a logger middleware to log request URL and body for all routes, excluding the user routes.
+11. Ensure original and high-quality code with comprehensive documentation.
+
