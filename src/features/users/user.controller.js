@@ -1,37 +1,57 @@
+import bcrypt from "bcrypt";
 import UserModel from "./user.model.js";
+import ApplicationError from "../../common/errors/ApplicationError.js";
 
 class UserController{
-    getAllUserDeatils(req, res, next){
-        var users = UserModel.getAllUsers();
-        res.status(201).send(users);
-    }
 
-    signUp(req, res, next){
+    async getAllUserDeatils(req, res, next){
         try {
-            const newUser = UserModel.addUser(req.body);
-
-            if(!newUser){
-                return res.status(409).send("Email already exists");
-            }
-
-            res.status(201).send(newUser);
+            const users = UserModel.getAllUsers();
+            res.status(200).json(users);
         } catch (error) {
-            throw new ApplicationError("Registration Failed", 500);
+            next(new ApplicationError("Failed to fetch users", 500));
         }
     }
 
-    signIn(req, res, next){
+    async signUp(req, res, next){
         try {
-            const user = UserModel.getUser(req.body);
-            if(!user){
-                return res.status(401).send("Wrong email");
+            const { name, email, password } = req.body;
+
+            if(UserModel.getUser(email)){
+                return res.status(409).json({ message: "Email already exists" });
             }
-            if(user.email != email || user.password != password){
-                return res.status(401).send("Wrong Email or Password");
-            }
-            res.status(201).send("Loggedin Successfull");
+
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Add the user
+            const newUser = UserModel.addUser({ name, email, password: hashedPassword });
+            res.status(201).json(newUser);
+
         } catch (error) {
-            throw new ApplicationError("Login Failed", 500);
+            next(new ApplicationError("Registration Failed", 500));
+        }
+    }
+
+    async signIn(req, res, next){
+        try {
+            const { email, password } = req.body;
+
+            // Check if user exists
+            const user = UserModel.getUser(email);
+            if (!user) {
+                return res.status(401).json({ message: "Wrong email or password" });
+            }
+
+            // Compare hashed password
+            const isPasswordCorrect = await bcrypt.compare(password, user.password);
+            if (!isPasswordCorrect) {
+                return res.status(401).json({ message: "Wrong email or password" });
+            }
+
+            res.status(200).json({ message: "Login successful" });
+        } catch (error) {
+            next(new ApplicationError("Login Failed", 500));
         }
     }
 }

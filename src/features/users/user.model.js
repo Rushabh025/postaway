@@ -8,16 +8,16 @@ export default class UserModel{
     }
 
     static addUser(userDetails){
+        if (this.getUser(userDetails.email)) {
+            return null; // Email already exists
+        }
+
         let newUser = new UserModel(
             users.length + 1,
             userDetails.name,
             userDetails.email,
             userDetails.password
         );
-
-        if(this.getUser(userDetails.email)){
-            return;
-        }
 
         users.push(newUser);
         return newUser;
@@ -28,7 +28,7 @@ export default class UserModel{
     }
 
     static getUser(email){
-        return users.find(user => user.email === email);
+        return users.find((user) => user.email === email);
     }
 
 

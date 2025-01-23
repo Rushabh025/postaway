@@ -1,72 +1,95 @@
 import PostModel from "./post.model.js";
+import ApplicationError from "../../common/errors/ApplicationError.js"
 
 class PostController{
+
+    // Create a new post
     createPost(req, res, next){
         try {
             const postData = req.body;
             const newPost = PostModel.addPost(postData);
 
-            if(!newPost){
-                return res.status(400).send("Data not pushed");
+            if (!newPost) {
+                return res.status(400).json({ success: false, message: "Post not created" });
             }
             
-            res.status(201).send(newPost);
+            res.status(201).json({ success: true, data: newPost });
             
         } catch (error) {
-            throw new ApplicationError("New Post Not Created", 500);
+            next(new ApplicationError("Failed to create post", 500));
         }
     }
 
+    // Get all posts
     getAllPosts(req, res, next){
         try {
-            const allPosts = PostModel.getAllPost();
-            res.status(201).send(allPosts);
+            const allPosts = PostModel.getAllPosts();
+            res.status(200).json({ success: true, data: allPosts });
         } catch (error) {
-            throw new ApplicationError("Could'nt Load All Posts", 500);
+            next(new ApplicationError("Failed to fetch all posts", 500));;
         }
     }
 
+    // Get posts for a specific user
     getUserPosts(req, res, next){
         try {
-            const userId = req.id;
-            if(!userId){
-                return res.status(400).send("User ID required");
+            const userId = parseInt(req.params.userId, 10);
+            if (!userId) {
+                return res.status(400).json({ success: false, message: "User ID required" });
             }
 
-            const userPosts = PostModel.getUserPost(userId);
-            res.status(201).send(userPosts);
+            const userPosts = PostModel.getUserPosts(userId);
+            res.status(200).json({ success: true, data: userPosts });
         } catch (error) {
-            throw new ApplicationError("Could'nt get User Posts", 500);
+            next(new ApplicationError("Failed to fetch user posts", 500));
         }
     }
 
+    // Get post by ID
     getPostById(req, res, next){
         try {
-            const id = req.id;
+            const id = parseInt(req.params.id, 10);
             const postsId = PostModel.getPostById(id);
-            res.status(201).send(postsId)
+
+            if (!post) {
+                return res.status(404).json({ success: false, message: "Post not found" });
+            }
+
+            res.status(200).json({ success: true, data: post });
         } catch (error) {
-            throw new ApplicationError("Could'nt get Post by Id", 500);
+            next(new ApplicationError("Failed to fetch post by ID", 500));
         }
     }
 
+    // Update a post
     updatePost(req, res, next){
         try {
             const data = req.body;
             const updatedData = PostModel.updatePost(data);
-            res.status(201).send(updatedData);
+
+            if (!updatedPost) {
+                return res.status(404).json({ success: false, message: "Post not found" });
+            }
+    
+            res.status(200).json({ success: true, data: updatedPost });
         } catch (error) {
-            throw new ApplicationError("Update post failed", 500);
+            next(new ApplicationError("Failed to update post", 500));
         }
     }
 
+    // Delete a post
     deletePost(req, res, next){
         try {
-            const id = req.id;
-            PostModel.deletePost(id);
-            res.status(201).send("Deleted Post successfully")
+            const id = parseInt(req.params.id, 10);
+            const isDeleted = PostModel.deletePost(id);
+
+            if (!isDeleted) {
+                return res.status(404).json({ success: false, message: "Post not found" });
+            }
+
+            res.status(200).json({ success: true, message: "Post deleted successfully" });
         } catch (error) {
-            throw new ApplicationError("Delete post failed", 500);
+            next(new ApplicationError("Failed to delete post", 500));
         }
     }
 }

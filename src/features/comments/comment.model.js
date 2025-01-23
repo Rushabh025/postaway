@@ -19,15 +19,35 @@ export default class CommentModel{
         return newComment;
     }
 
-    // there might be error
-    static getPostComments(postId){
-        return comments.find(comment => comment.postId === postId);
+    // Get all comments for a post
+    static getPostComments(postId) {
+        return comments.filter(comment => comment.postId === postId);
     }
 
-    static updateComment(postId){
-        
+    static updateComment(updateData){
+        const comment = comments.find(comment => comment.id === updateData.id);
+        if (!comment) {
+            return null; // Comment not found
+        }
+
+        comment.content = updateData.content || comment.content;
+        return comment;
+    }
+
+    static deleteComment(id){
+        const commentIndex = comments.findIndex(comment => comment.id === id);
+        if(commentIndex === -1){
+            return false;
+        }
+
+        comments.splice(commentIndex, 1);
+        return true; // Successfully deleted
     }
 
 }
 
-let comments = [];
+let comments = [
+    new CommentModel(1, 1, 1, "First comment"),
+    new CommentModel(2, 2, 1, "Second comment"),
+    new CommentModel(3, 1, 2, "Comment on post 2"),
+];

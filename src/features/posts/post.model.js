@@ -18,11 +18,11 @@ export default class PostModel{
         return newPost;
     }
 
-    static getAllPost(){
+    static getAllPosts(){
         return posts;
     }
 
-    static getUserPost(userId){
+    static getUserPosts(userId){
         return posts.find(post => post.userId === userId);
     }
 
@@ -33,7 +33,7 @@ export default class PostModel{
     static updatePost(updateData){
         var post = posts.find(post => post.id === updateData.id);
         if(!post){
-            return res.status(404).send('Post not found');
+            return null;
         }
 
         const {caption, imageUrl} = updateData;
@@ -44,7 +44,7 @@ export default class PostModel{
     }
 
     static deletePost(id){
-        var postIndex = posts.find(post => post.id === id);
+        var postIndex = posts.findIndex(post => post.id === id);
         if(postIndex === -1){
             return false;
         }
@@ -55,5 +55,6 @@ export default class PostModel{
 }
 
 let posts = [
-    new PostModel(1, 1, "First Post", "/img.jpg")
+    new PostModel(1, 1, "First Post", "/img.jpg"),
+    new PostModel(2, 2, "Second Post", "/img2.jpg"),
 ];
