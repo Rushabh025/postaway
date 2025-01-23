@@ -12,6 +12,7 @@ import likeRoutes from "./features/likes/like.routes.js";
 
 const app = express();
 
+app.use(express.json());
 app.use(session({
     secret: "12345",
     resave: false,

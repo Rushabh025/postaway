@@ -55,7 +55,7 @@ class PostController{
     getPostById(req, res, next){
         try {
             const id = parseInt(req.params.id, 10);
-            const postsId = PostModel.getPostById(id);
+            const post = PostModel.getPostById(id);
 
             if (!post) {
                 return res.status(404).json({ success: false, message: "Post not found" });
@@ -71,7 +71,8 @@ class PostController{
     updatePost(req, res, next){
         try {
             const data = req.body;
-            const updatedData = PostModel.updatePost(data);
+            const id = parseInt(req.params.id, 10);
+            const updatedPost = PostModel.updatePost({id, data});
 
             if (!updatedPost) {
                 return res.status(404).json({ success: false, message: "Post not found" });

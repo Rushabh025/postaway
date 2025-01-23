@@ -6,7 +6,7 @@ const postController = new PostController();
 
 postRoutes.get('/all', postController.getAllPosts);
 postRoutes.get('/:id', postController.getPostById);
-postRoutes.get('/', postController.getAllPosts);
+postRoutes.get('/', postController.getUserPosts);
 postRoutes.post('/', postController.createPost);
 postRoutes.delete('/:id', postController.deletePost);
 postRoutes.put('/:id', postController.updatePost);

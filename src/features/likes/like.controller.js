@@ -21,7 +21,8 @@ class LikeController{
 
     toggleLikes(req, res, next){
         try {
-            const { userId, postId } = req.body;
+            const { userId } = req.body;
+            const postId = parseInt(req.params.postId, 10);
             if (!userId || !postId) {
                 return res.status(400).json({ success: false, message: "User ID and Post ID are required" });
             }

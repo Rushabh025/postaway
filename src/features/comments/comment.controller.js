@@ -6,7 +6,8 @@ class CommentController{
     // Create a new comment
     newComment(req, res, next){
         try {
-            const { userId, postId, content } = req.body;
+            const { userId, content } = req.body;
+            const postId = parseInt(req.params.id, 10);
 
             if (!userId || !postId || !content) {
                 return res.status(400).json({ success: false, message: "All fields are required" });
@@ -23,7 +24,7 @@ class CommentController{
     // Get all comments for a post
     getCommentsByPost(req, res, next){
         try {
-            const postId = parseInt(req.params.postId, 10);
+            const postId = parseInt(req.params.id, 10);
 
             if (!postId) {
                 return res.status(400).json({ success: false, message: "Post ID is required" });
