@@ -7,6 +7,12 @@ class PostController{
     createPost(req, res, next){
         try {
             const postData = req.body;
+            const uploadedFile = req.file; // The uploaded file will be available here
+
+            if (uploadedFile) {
+                postData.imageUrl = '/uploads/' + uploadedFile.filename; // Save the uploaded file URL
+            }
+            
             const newPost = PostModel.addPost(postData);
 
             if (!newPost) {
