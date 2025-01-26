@@ -33,3 +33,10 @@ Acceptance criteria
 10. Use a logger middleware to log request URL and body for all routes, excluding the user routes.
 11. Ensure original and high-quality code with comprehensive documentation.
 
+Additional Tasks
+1. Add a feature to allow users to filter posts based on the posts caption. 
+2. Add a feature to save a post as a draft and to archive a post. 
+3. Implement sorting of posts based on user engagement and date. 
+4. Add a feature to bookmark a post. 
+5. Implement pagination for posts and comments.
+

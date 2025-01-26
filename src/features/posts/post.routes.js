@@ -10,5 +10,6 @@ postRoutes.get('/', postController.getUserPosts);
 postRoutes.post('/', postController.createPost);
 postRoutes.delete('/:id', postController.deletePost);
 postRoutes.put('/:id', postController.updatePost);
+postRoutes.get('/filter', postController.filterPostsByCaption);
 
 export default postRoutes;

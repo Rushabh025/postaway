@@ -39,9 +39,9 @@ class PostController{
     // Get posts for a specific user
     getUserPosts(req, res, next){
         try {
-            const userId = parseInt(req.params.userId, 10);
+            const userId = parseInt(req.session.userId, 10);
             if (!userId) {
-                return res.status(400).json({ success: false, message: "User ID required" });
+                return res.status(401).send({ message: "Unauthorized: Please log in." });
             }
 
             const userPosts = PostModel.getUserPosts(userId);
@@ -97,6 +97,20 @@ class PostController{
             res.status(200).json({ success: true, message: "Post deleted successfully" });
         } catch (error) {
             next(new ApplicationError("Failed to delete post", 500));
+        }
+    }
+
+    filterPostsByCaption(req, res, next) {
+        try {
+            const { caption } = req.query; // Get the caption filter from query parameters
+            if (!caption) {
+                return res.status(400).send("Caption query parameter is required");
+            }
+
+            const filteredPosts = PostModel.filterByCaption(caption);
+            res.status(200).send(filteredPosts);
+        } catch (error) {
+            next(new ApplicationError("Failed to filter posts by caption", 500));
         }
     }
 }

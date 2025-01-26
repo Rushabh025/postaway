@@ -52,6 +52,10 @@ export default class PostModel{
         posts.splice(postIndex, 1);
         return true;
     }
+
+    static filterByCaption(caption) {
+        return posts.filter(post => post.caption.toLowerCase().includes(caption.toLowerCase()));
+    }
 }
 
 let posts = [

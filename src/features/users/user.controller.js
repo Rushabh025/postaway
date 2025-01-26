@@ -49,6 +49,9 @@ class UserController{
                 return res.status(401).json({ message: "Wrong email or password" });
             }
 
+            // Store the user ID in the session
+            req.session.userId = user.id;
+            
             res.status(200).json({ message: "Login successful" });
         } catch (error) {
             next(new ApplicationError("Login Failed", 500));

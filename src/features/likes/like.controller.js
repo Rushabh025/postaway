@@ -21,10 +21,14 @@ class LikeController{
 
     toggleLikes(req, res, next){
         try {
-            const { userId } = req.body;
+            const userId = parseInt(req.session.userId, 10);
+            if (!userId) {
+                return res.status(401).send({ message: "Unauthorized: Please log in." });
+            }
+            
             const postId = parseInt(req.params.postId, 10);
-            if (!userId || !postId) {
-                return res.status(400).json({ success: false, message: "User ID and Post ID are required" });
+            if (!postId) {
+                return res.status(400).json({ success: false, message: "Post ID required" });
             }
             const result = LikeModel.toggleLike(userId, postId);
 
